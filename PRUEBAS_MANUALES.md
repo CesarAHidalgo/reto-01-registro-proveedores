@@ -62,7 +62,7 @@ La interfaz puede abrir sin clave, pero mostrará un mensaje de configuración p
 ## C. Ejecución compilada
 
 ```bash
-npm ci
+npm ci --include=dev
 npm run build
 npm start
 ```

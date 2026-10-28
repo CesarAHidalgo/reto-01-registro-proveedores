@@ -47,7 +47,7 @@ Las sesiones viven en memoria. Se pierden al reiniciar; los archivos se escriben
 
 ## Despliegue de prueba
 
-URL pública: **pendiente**. En un servicio Node que permita escritura temporal: compilar con `npm ci && npm run build`, iniciar con `npm start`, configurar `NODE_ENV=production`, `GEMINI_API_KEY` y `DEMO_ACCESS_CODE` en el entorno del servidor. El código debe tener al menos 12 caracteres y comunicarse por un canal seguro. El proceso de ejecución utiliza JavaScript compilado y puede funcionar con dependencias de producción únicamente después de compilar. El alojamiento gratuito puede perder los paquetes al reiniciar; volver a procesar el caso antes de la demostración. No usar información real con esta configuración.
+URL pública: **pendiente**. En un servicio Node que permita escritura temporal: compilar con `npm ci --include=dev && npm run build`, iniciar con `npm start`, configurar `NODE_ENV=production`, `GEMINI_API_KEY` y `DEMO_ACCESS_CODE` en el entorno del servidor. El código debe tener al menos 12 caracteres y comunicarse por un canal seguro. El proceso de ejecución utiliza JavaScript compilado y puede funcionar con dependencias de producción únicamente después de compilar. El alojamiento gratuito puede perder los paquetes al reiniciar; volver a procesar el caso antes de la demostración. No usar información real con esta configuración.
 
 Ver `SOLUCION.md` para arquitectura, límites, decisiones y riesgos.
 
@@ -56,3 +56,5 @@ Ver `SOLUCION.md` para arquitectura, límites, decisiones y riesgos.
 `npm run sync:module` genera `modulo/` desde las mismas fuentes de la aplicación. La suite detecta divergencias y prueba su importación por separado; ver `modulo/README.md`.
 
 Para instrucciones detalladas y resultados esperados, consulta [PRUEBAS_MANUALES.md](PRUEBAS_MANUALES.md).
+
+Consulta [DESPLIEGUE_RENDER.md](DESPLIEGUE_RENDER.md) para los pasos de despliegue y verificación pública.
