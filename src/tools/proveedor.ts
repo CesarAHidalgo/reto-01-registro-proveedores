@@ -12,7 +12,7 @@ type Resultado<T> = {ok: true; data: T} | {ok: false; error: string};
 const casoSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(100).describe('Nombre de carpeta del caso');
 const solicitudSchema = z.object({ pais: z.string(), cliente: z.string(), formato: z.enum(['xlsx','pdf','portal']), de: z.string().optional() });
 const campoSchema = z.object({ etiqueta: z.string().min(1), hoja: z.string().optional(), celda_etiqueta: z.string().regex(/^[A-Z]+[1-9][0-9]*$/).optional(), celda_valor: z.string().regex(/^[A-Z]+[1-9][0-9]*$/).optional(), obligatorio: z.boolean().optional() });
-const soporteSchema = z.object({ tipo: z.string(), archivo: z.string().regex(/^[a-zA-Z0-9._-]+$/), vigencia_hasta: z.string().nullable() });
+const soporteSchema = z.object({ tipo: z.string(), archivo: z.string().regex(/^[a-zA-Z0-9._-]+$/).refine(s=>s!=='.'&&s!=='..'), vigencia_hasta: z.string().nullable() });
 const rootFixtures = (ctx: Contexto) => path.join(ctx.directory,'fixtures','reto-01');
 const dirCaso = (ctx: Contexto, caso: string) => path.join(rootFixtures(ctx),'casos',casoSchema.parse(caso));
 const dirOut = (ctx: Contexto, caso: string) => path.join(ctx.directory,'out',casoSchema.parse(caso));

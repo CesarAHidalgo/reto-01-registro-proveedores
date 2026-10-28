@@ -45,4 +45,9 @@ app.get('/api/casos/:caso/paquete',async(req,res)=>{
 });
 app.use(express.static(path.join(directory,'web'),{index:'index.html'}));
 app.use((_req,res)=>res.status(404).json({error:'Recurso no encontrado.'}));
+app.use((error:unknown,_req:express.Request,res:express.Response,next:express.NextFunction)=>{
+  if(res.headersSent)return next(error);
+  const status=typeof error==='object' && error!==null && 'status' in error && (error as {status:unknown}).status===400?400:500;
+  return res.status(status).json({error:status===400?'Solicitud inválida.':'No fue posible completar la operación.'});
+});
 app.listen(env.PORT,'0.0.0.0',()=>console.log(`Servidor listo en el puerto ${env.PORT}. Modelo configurado: ${Boolean(agente)}`));

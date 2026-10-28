@@ -12,6 +12,7 @@ test('API local valida acceso, salud y configuración ausente',async t=>{
   assert.equal((await fetch(url+'/api/health')).status,401);
   const headers={Authorization:'Basic '+Buffer.from(`demo:${code}`).toString('base64')};const health=await fetch(url+'/api/health',{headers});assert.equal(health.status,200);assert.equal((await health.json() as {configured:boolean}).configured,false);
   const wrong=await fetch(url+'/api/chat',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:''})});assert.equal(wrong.status,400);
+  const invalidJson=await fetch(url+'/api/chat',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:'{'});assert.equal(invalidJson.status,400);assert.deepEqual(await invalidJson.json(),{error:'Solicitud inválida.'});
   const noKey=await fetch(url+'/api/chat',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:'hola'})});assert.equal(noKey.status,503);
   assert.equal((await fetch(url+'/',{headers})).status,200);
 });
