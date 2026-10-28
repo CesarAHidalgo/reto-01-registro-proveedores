@@ -11,7 +11,7 @@ import { Gemini } from './llm/gemini.js';
 const env=z.object({
   PORT:z.coerce.number().int().min(1).max(65535).default(3000),
   GEMINI_API_KEY:z.string().optional(),
-  GEMINI_MODEL:z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/).default('gemini-2.5-flash-lite'),
+  GEMINI_MODEL:z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/).default('gemini-3.1-flash-lite'),
   MAX_TURN_ITERATIONS:z.coerce.number().int().min(1).max(25).default(8),
   MAX_SESSION_TOKENS:z.coerce.number().int().min(1000).max(1000000).default(30000),
   MAX_OUTPUT_TOKENS:z.coerce.number().int().min(64).max(8192).default(1024),

@@ -32,9 +32,9 @@ El modelo decide qué herramientas invocar, pero el texto libre que produce no s
 
 ## 4. Modelo y costos
 
-Se propone `gemini-2.5-flash-lite`, configurable, por soporte de herramientas y disponibilidad de nivel gratuito sujeto a cuota. Clave mediante `GEMINI_API_KEY` solo en el backend. Consultar cuota y disponibilidad de la cuenta antes de la defensa. El nivel gratuito de Google indica que el contenido puede utilizarse para mejorar sus productos; por eso se limita esta demo a los datos ficticios suministrados y no debe emplearse con datos corporativos reales.
+Se utiliza `gemini-3.1-flash-lite`, configurable, por soporte de herramientas y disponibilidad de nivel gratuito sujeto a cuota. La versión 2.5 inicialmente configurada ya no estaba disponible para cuentas nuevas y se verificó una llamada real con la versión 3.1. Clave mediante `GEMINI_API_KEY` solo en el backend. Consultar cuota y disponibilidad de la cuenta antes de la defensa. El nivel gratuito de Google indica que el contenido puede utilizarse para mejorar sus productos; por eso se limita esta demo a los datos ficticios suministrados y no debe emplearse con datos corporativos reales.
 
-Según la [tarifa oficial de Gemini](https://ai.google.dev/gemini-api/docs/pricing) consultada el 28-10-2026, para el nivel de pago estándar Flash-Lite 2.5: USD 0,10 por millón de tokens de entrada de texto y USD 0,40 por millón de tokens de salida; el nivel gratuito indica entrada y salida sin costo dentro de la cuota. Ejemplo ilustrativo, no medido: 10.000 tokens de entrada y 2.000 de salida cuestan aproximadamente USD 0,0018 en nivel pago. Cálculo = (10.000 × 0,10 + 2.000 × 0,40) / 1.000.000. El volumen real depende de las rondas y del contexto, y se debe medir con una clave válida. No se utiliza búsqueda externa.
+Según la [tarifa oficial de Gemini](https://ai.google.dev/gemini-api/docs/pricing) consultada el 28-10-2026, para el nivel de pago estándar Flash-Lite 3.1: USD 0,25 por millón de tokens de entrada de texto y USD 1,50 por millón de tokens de salida; el nivel gratuito indica entrada y salida sin costo dentro de la cuota. Ejemplo ilustrativo, no medido: 10.000 tokens de entrada y 2.000 de salida cuestan aproximadamente USD 0,0055 en nivel pago. Cálculo = (10.000 × 0,25 + 2.000 × 1,50) / 1.000.000. El volumen real depende de las rondas y del contexto; no se han registrado métricas de costo por caso. No se utiliza búsqueda externa.
 
 ## 5. Diseño de portal web
 
@@ -67,7 +67,7 @@ El portal no se automatiza: se produce `valores-portal.md`. En una evolución se
 | HU3 formatos | Hecho localmente | XLSX, PDF y portal; pruebas de archivos generados. |
 | HU4 paquete | Hecho localmente | Soportes, vencimientos, checklist, borrador y simulación. |
 | HU5 errores | Parcial | Errores tipados, plantilla corrupta y caso inexistente probados; no todas las combinaciones de fallo se han cubierto. |
-| Chat con modelo real | Parcial | Ciclo, SDK y confirmaciones probados con una API simulada; pendiente clave y prueba real de Gemini. |
+| Chat con modelo real | Parcial | Caso de Ecuador y confirmación de envío simulado probados en la misma sesión con Gemini 3.1; faltan los demás casos y verificar el despliegue público. |
 | URL pública | Pendiente | Se evaluará al finalizar las pruebas locales; acceso y despliegue no configurados. |
 | CI | Preparado | Flujo de GitHub Actions en repositorio; pendiente su ejecución en remoto. |
 | Módulo | Verificado localmente | Se genera desde las fuentes canónicas, la suite compara el contenido y se importó una copia aislada; la integración con plataformas externas sigue pendiente. |
