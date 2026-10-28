@@ -47,7 +47,9 @@ Las sesiones viven en memoria. Se pierden al reiniciar; los archivos se escriben
 
 ## Despliegue de prueba
 
-URL pública: **pendiente**. En un servicio Node que permita escritura temporal: compilar con `npm ci --include=dev && npm run build`, iniciar con `npm start`, configurar `NODE_ENV=production`, `GEMINI_API_KEY` y `DEMO_ACCESS_CODE` en el entorno del servidor. El código debe tener al menos 12 caracteres y comunicarse por un canal seguro. El proceso de ejecución utiliza JavaScript compilado y puede funcionar con dependencias de producción únicamente después de compilar. El alojamiento gratuito puede perder los paquetes al reiniciar; volver a procesar el caso antes de la demostración. No usar información real con esta configuración.
+URL de la demostración: [https://reto-01-registro-proveedores.onrender.com/](https://reto-01-registro-proveedores.onrender.com/). El acceso utiliza usuario `evaluador` y el código de demostración entregado por un canal privado. No se publica aquí el código ni la clave del modelo. Si el servicio gratuito se suspende, puede tardar alrededor de un minuto en despertar y los paquetes generados se pierden; vuelve a procesar el caso. No uses información real con esta configuración.
+
+Para reproducir el despliegue: compilar con `npm ci --include=dev && npm run build`, iniciar con `npm start` y configurar `NODE_ENV=production`, `GEMINI_API_KEY` y `DEMO_ACCESS_CODE` en el servidor. El código debe tener al menos 12 caracteres y comunicarse por un canal seguro. El proceso de ejecución utiliza JavaScript compilado y puede funcionar con dependencias de producción únicamente después de compilar.
 
 Ver `SOLUCION.md` para arquitectura, límites, decisiones y riesgos.
 

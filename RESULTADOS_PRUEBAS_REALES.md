@@ -32,8 +32,12 @@ En el primer intento de la plantilla corrupta, el servidor comunicó un error ge
 
 La suite ordinaria de pruebas automatizadas también se ejecutó: 24 pruebas aprobadas y verificación de tipos correcta. Esa suite utiliza respuestas simuladas del proveedor y complementa las pruebas reales descritas aquí.
 
+## Verificación del despliegue
+
+El 28 de octubre de 2026 se publicó [la aplicación en Render](https://reto-01-registro-proveedores.onrender.com/). Se verificó desde fuera que solicita acceso y, tras autenticar la sesión de prueba, se procesó el caso de Ecuador con Gemini real: se mostraron las herramientas, faltantes, soportes y confirmación, y se descargó y revisó el contenido del paquete ZIP. Las pruebas de los cuatro casos y la confirmación o rechazo del envío se realizaron en local; no se han repetido todos los casos en el servicio público.
+
 ## Límites y pendientes
 
 - Estas pruebas cubren los cuatro casos oficiales y los escenarios indicados; no demuestran todas las combinaciones posibles ni eliminan errores intermitentes del proveedor.
-- La aplicación sigue en una dirección local. Falta desplegarla, comprobar el control de acceso y probar el enlace público desde fuera antes de la defensa.
+- El servicio gratuito puede suspenderse y perder los archivos generados. Conviene abrir el enlace y generar los paquetes antes de la defensa; falta ensayar allí los demás casos si se requieren.
 - La protección actual es para una demostración con datos ficticios. No se debe utilizar con datos reales sin autenticación individual, aislamiento, tratamiento de datos y demás controles descritos en `SOLUCION.md`.
