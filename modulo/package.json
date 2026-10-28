@@ -1,0 +1,16 @@
+{
+  "name": "registro-proveedor-modulo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "zod": "^4.6.7",
+    "exceljs": "^4.4.0",
+    "pdf-lib": "^1.17.1"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "^11.1.1"
+    }
+  }
+}

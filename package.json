@@ -8,10 +8,13 @@
   },
   "scripts": {
     "dev": "tsx src/server.ts",
-    "start": "tsx src/server.ts",
+    "start": "node dist/src/server.js",
     "demo": "tsx demo.ts",
     "test": "tsx --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "pretest": "npm run build",
+    "sync:module": "node scripts/sync-module.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.31.0",

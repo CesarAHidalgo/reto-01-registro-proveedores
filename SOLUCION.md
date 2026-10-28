@@ -22,11 +22,13 @@ Chat HTML/JS → API Express → ciclo del agente → interfaz AdaptadorLLM → 
 
 ## 3. Ciclo del agente
 
-El servidor conserva la conversación y entrega prompt, conocimiento, historial y definiciones de herramientas al adaptador. Valida argumentos con Zod; ejecuta cada herramienta y devuelve su resultado al modelo. Se limita el número de rondas por turno y los tokens por sesión. Cada llamada tiene timeout; errores se comunican sin trazas ni detalles del proveedor.
+El servidor conserva la conversación y entrega prompt, conocimiento, historial y definiciones de herramientas al adaptador. El contrato interno del adaptador no depende de tipos del SDK de Gemini. El servidor valida argumentos con Zod; ejecuta cada herramienta y devuelve su resultado al modelo. Se limita el número de rondas por turno y los tokens por sesión. Cada llamada tiene timeout; errores se comunican sin trazas ni detalles del proveedor.
 
-La preparación del paquete activa un estado de confirmación gestionado por el servidor. El siguiente mensaje debe ser una confirmación explícita reconocida; únicamente entonces se llama a `simular_envio` con una señal de confirmación de servidor. Otro mensaje invalida ese estado. El resultado es un archivo local, nunca un envío real. El servidor muestra resúmenes de llamadas y registra eventos sin valores sensibles. Existe además un límite de peticiones por IP y un máximo de sesiones en memoria.
+El conteo previo usa el endpoint REST `countTokens` con `generateContentRequest`, que incluye instrucciones y herramientas; el SDK del proveedor no admite esos campos en su método de conteo para Developer API. Si una generación falla después de iniciada y el consumo es incierto, se contabiliza la reserva máxima de esa llamada para limitar reintentos. El servicio y el SDK se verifican con respuestas simuladas; falta la prueba con una clave real.
 
-El prompt prohíbe inventar datos, pero una salida de lenguaje natural puede contener errores: los archivos, mapeos y estados obtenidos de herramientas son la evidencia autoritativa. Para producción se necesitaría validación adicional de afirmaciones antes de mostrarlas.
+La preparación del paquete activa un estado de confirmación gestionado por el servidor. El siguiente mensaje debe ser una confirmación explícita reconocida; únicamente entonces se llama a `simular_envio` con una señal de confirmación de servidor. Otro mensaje invalida ese estado. El resultado es un archivo local, nunca un envío real. El servidor muestra resúmenes de llamadas y registra eventos sin valores sensibles. Existe además un límite de peticiones aplicado antes de autenticar y un máximo de sesiones en memoria. En producción se exige un código de acceso y en local se escucha solo en loopback.
+
+El modelo decide qué herramientas invocar, pero el texto libre que produce no se presenta como dato al usuario. El servidor compone una respuesta estructurada únicamente con los resultados de herramientas; si no hay datos verificados muestra una indicación genérica. Esto reduce el riesgo de inventar valores a costa de respuestas conversacionales menos flexibles. Las fuentes y sus datos aún requieren validación y revisión humana.
 
 ## 4. Modelo y costos
 
@@ -44,8 +46,8 @@ El portal no se automatiza: se produce `valores-portal.md`. En una evolución se
 2. **Memoria y sistema de archivos frente a base de datos:** simplifica el alcance del reto. Se pierden sesiones y archivos cuando el entorno reinicia y no se soporta operación multiusuario fiable.
 3. **Excel generado desde mapa de celdas frente a modificar un archivo original:** los fixtures proporcionan coordenadas JSON y no un Excel real; se crean las hojas y celdas indicadas. No conserva estilos de un archivo original inexistente.
 4. **PDF generado frente a AcroForm:** se reproduce el orden de los campos del JSON y el texto; no se reconstruye el diseño de una plantilla PDF original no suministrada.
-5. **Confirmación en servidor frente a confiar en un booleano del modelo:** protege la transición de envío simulado, pero la detección textual de la confirmación se limita a expresiones explícitas reconocidas.
-6. **Dependencias:** Express (HTTP), Zod (contratos), ExcelJS (XLSX), pdf-lib (PDF), archiver (descarga ZIP), SDK de Google (modelo), dotenv (configuración); tsx/TypeScript para ejecución y verificación. `uuid` transitivo de ExcelJS se fuerza a una versión sin la alerta conocida y se verifica con la suite.
+5. **Confirmación en servidor frente a confiar en un booleano del modelo:** protege la transición de envío simulado y exige que el caso se haya preparado en la sesión, pero la detección textual de la confirmación se limita a expresiones explícitas reconocidas.
+6. **Dependencias:** Express (HTTP), Zod (contratos), ExcelJS (XLSX), pdf-lib (PDF), archiver (descarga ZIP), SDK de Google (modelo), dotenv (configuración); tsx/TypeScript para desarrollo y compilación. El proceso de producción usa JavaScript compilado, sin tsx. `uuid` transitivo de ExcelJS se fuerza a una versión sin la alerta conocida y se verifica con la suite.
 
 ## 7. Supuestos
 
@@ -61,14 +63,14 @@ El portal no se automatiza: se produce `valores-portal.md`. En una evolución se
 | Historia / requisito | Estado | Evidencia / límite |
 | --- | --- | --- |
 | HU1 lectura | Hecho localmente | Cuatro fixtures y plantilla corrupta en pruebas. |
-| HU2 mapeo | Hecho localmente | Glosario, fuentes, faltantes y confirmación extranjera; sin mapeo difuso. |
+| HU2 mapeo | Hecho localmente | Glosario, fuentes, faltantes y confirmación extranjera; se rechazan listas incompletas y duplicados; sin mapeo difuso. |
 | HU3 formatos | Hecho localmente | XLSX, PDF y portal; pruebas de archivos generados. |
 | HU4 paquete | Hecho localmente | Soportes, vencimientos, checklist, borrador y simulación. |
 | HU5 errores | Parcial | Errores tipados, plantilla corrupta y caso inexistente probados; no todas las combinaciones de fallo se han cubierto. |
-| Chat con modelo real | Parcial | Ciclo y confirmaciones probados con modelo simulado; pendiente clave y prueba real de Gemini. |
+| Chat con modelo real | Parcial | Ciclo, SDK y confirmaciones probados con una API simulada; pendiente clave y prueba real de Gemini. |
 | URL pública | Pendiente | Se evaluará al finalizar las pruebas locales; acceso y despliegue no configurados. |
 | CI | Preparado | Flujo de GitHub Actions en repositorio; pendiente su ejecución en remoto. |
-| Módulo | Preparado | `modulo/` enlaza a las mismas piezas mediante enlaces simbólicos; integración externa pendiente de verificación. |
+| Módulo | Verificado localmente | Se genera desde las fuentes canónicas, la suite compara el contenido y se importó una copia aislada; la integración con plataformas externas sigue pendiente. |
 
 Los comandos y resultados locales se detallan en `README.md` y se deben volver a ejecutar antes de la entrega.
 
@@ -78,4 +80,4 @@ Se utilizó **Codex de OpenAI** para analizar el PRD, proponer e implementar arq
 
 ## 10. Riesgos y evolución a producción
 
-El sistema no es apto para datos reales: faltan identidad individual, autorización por rol, aislamiento de sesiones y archivos, cifrado, retención, controles de acceso a soportes, observabilidad auditada y protección de datos antes de enviarlos al proveedor del modelo. Las salidas del modelo pueden ser incorrectas o estar influidas por entradas maliciosas; se requiere separación de confianza, verificación de afirmaciones y revisión humana. La autenticación básica opcional solo protege una demo compartida. Los archivos temporales pueden desaparecer con el reinicio del servicio y las operaciones simultáneas de un mismo caso pueden interferir. El límite de sesión no sustituye cuotas globales duraderas ni facturación monitorizada. Las tarifas, cuotas y condiciones del proveedor deben verificarse para el entorno real.
+El sistema no es apto para datos reales: faltan identidad individual, autorización por rol, aislamiento de sesiones y archivos, cifrado, retención, controles de acceso a soportes, observabilidad auditada y protección de datos antes de enviarlos al proveedor del modelo. El modelo puede tomar decisiones equivocadas o estar influido por entradas maliciosas; se requiere separación de confianza, evaluación adicional y revisión humana. La autenticación básica compartida solo protege una demo y no aísla usuarios. Los archivos temporales pueden desaparecer con el reinicio del servicio y las operaciones simultáneas de un mismo caso pueden interferir. El límite de sesión no sustituye cuotas globales duraderas ni facturación monitorizada. El límite de peticiones en memoria no se comparte entre instancias y, detrás de un proxy, puede agrupar clientes bajo una sola IP; debe configurarse una política de proxy confiable y verificarse con el proveedor antes de publicar. Las tarifas, cuotas y condiciones del proveedor deben verificarse para el entorno real.

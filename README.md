@@ -15,7 +15,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Abrir `http://localhost:3000`. Si no hay clave, la interfaz abre y la API comunica que falta configuración. Nunca incluyas `.env` en la entrega. Cambia `PORT` si el puerto está ocupado.
+Abrir `http://localhost:3000`. En modo local el servidor escucha solo en la interfaz de bucle local. Si no hay clave, la interfaz abre y la API comunica que falta configuración. Nunca incluyas `.env` en la entrega. Cambia `PORT` si el puerto está ocupado.
 
 ## Verificación
 
@@ -43,10 +43,14 @@ Casos: `co-industrias-delta`, `ec-corp-andina`, `hn-agroexport-sula`, `pa-logist
 - `GET /api/sessions/:id`: historial de la sesión.
 - `GET /api/casos/:caso/paquete`: descarga el paquete generado como ZIP.
 
-Las sesiones viven en memoria. Se pierden al reiniciar; los archivos se escriben en `out/`. Opcionalmente, `DEMO_ACCESS_CODE` habilita autenticación básica para la demo: el usuario puede ser cualquiera y la contraseña es el valor configurado. Debe comunicarse de forma segura, no guardarse en el repositorio. Este control no sustituye autenticación ni autorización de producción.
+Las sesiones viven en memoria. Se pierden al reiniciar; los archivos se escriben en `out/`. `DEMO_ACCESS_CODE` habilita autenticación básica para la demo y es obligatorio cuando `NODE_ENV=production`: el usuario puede ser cualquiera y la contraseña es el valor configurado. Debe comunicarse de forma segura, no guardarse en el repositorio. El límite de peticiones es local a cada proceso; detrás de un proxy puede agrupar a varios clientes bajo una misma IP. Este control no sustituye autenticación, autorización ni aislamiento de producción.
 
 ## Despliegue de prueba
 
-URL pública: **pendiente**. En un servicio Node que permita escritura temporal: instalar con `npm ci`, iniciar con `npm start`, configurar las variables del ejemplo en el servidor y usar un código de acceso. El alojamiento gratuito puede perder los paquetes al reiniciar; volver a procesar el caso antes de la demostración. No usar información real con esta configuración.
+URL pública: **pendiente**. En un servicio Node que permita escritura temporal: compilar con `npm ci && npm run build`, iniciar con `npm start`, configurar `NODE_ENV=production`, `GEMINI_API_KEY` y `DEMO_ACCESS_CODE` en el entorno del servidor. El código debe tener al menos 12 caracteres y comunicarse por un canal seguro. El proceso de ejecución utiliza JavaScript compilado y puede funcionar con dependencias de producción únicamente después de compilar. El alojamiento gratuito puede perder los paquetes al reiniciar; volver a procesar el caso antes de la demostración. No usar información real con esta configuración.
 
 Ver `SOLUCION.md` para arquitectura, límites, decisiones y riesgos.
+
+## Módulo reutilizable
+
+`npm run sync:module` genera `modulo/` desde las mismas fuentes de la aplicación. La suite detecta divergencias y prueba su importación por separado; ver `modulo/README.md`.

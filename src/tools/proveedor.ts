@@ -57,9 +57,15 @@ function rutaValor(master: unknown, key: string): unknown {
 }
 async function calcularMapeo(ctx: Contexto, caso: string, campos: Campo[]): Promise<Mapeo> {
   const solicitud=await obtenerCaso(ctx,caso);
+  if(solicitud.error_plantilla)throw new Error(`USUARIO:${solicitud.error_plantilla}`);
   const glosario=z.record(z.string(),z.string()).parse(await leerJson(path.join(rootFixtures(ctx),'glosario-campos.json')));
   const master=await leerJson(path.join(rootFixtures(ctx),'repositorio','maestro.json'));
   const permitidos=new Set(solicitud.campos.map(c=>c.etiqueta));
+  const esperados=solicitud.campos.map(c=>c.etiqueta).sort();
+  const recibidos=campos.map(c=>c.etiqueta).sort();
+  if (esperados.length!==recibidos.length || esperados.some((etiqueta,i)=>etiqueta!==recibidos[i])) {
+    throw new Error('USUARIO:El mapeo debe incluir todos los campos de la plantilla exactamente una vez por aparición.');
+  }
   const result: Mapeo={llenos:[],faltantes:[],requiere_confirmacion:[]};
   for (const {etiqueta} of campos) {
     if (!permitidos.has(etiqueta)) throw new Error('USUARIO:El campo no pertenece a la plantilla del caso.');
@@ -126,7 +132,7 @@ async function paquete(ctx: Contexto, caso: string) {
   const confirmaciones=m.requiere_confirmacion.map(x=>`- ${x.etiqueta}: ${x.nota}`).join('\n') || '- Ninguna';
   await guardar(path.join(paq,'checklist.md'),`# Checklist\n\nFecha de evaluación: ${fecha(ctx)}\n\n## Soportes\n${lista}\n\n## Campos faltantes\n${faltantes}\n\n## Requieren confirmación\n${confirmaciones}\n\nListo para firma: ${listo?'sí':'no'}\n`);
   await guardar(path.join(paq,'borrador-correo.md'),`# Borrador de correo\n\nAsunto: Registro como proveedor - ${s.cliente}\n\nEstimados:\n\nAdjuntamos el formulario y los soportes disponibles para revisión y firma. Antes de cualquier envío, revise los faltantes y vigencias del checklist.\n\nCordialmente.\n`);
-  return {ruta:`out/${caso}/paquete/`,listo_para_firma:listo,checklist};
+  return {ruta:`out/${caso}/paquete/`,listo_para_firma:listo,checklist,mapeo:m};
 }
 const casoArgs={caso:casoSchema};
 export const leer_solicitud={description:'Lee los campos y soportes solicitados en un caso.',args:casoArgs,async execute(args:{caso:string},ctx:Contexto){return ejecutar(ctx,args.caso,'leer_solicitud',()=>obtenerCaso(ctx,args.caso));}};
