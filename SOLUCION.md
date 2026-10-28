@@ -67,7 +67,7 @@ El portal no se automatiza: se produce `valores-portal.md`. En una evolución se
 | HU3 formatos | Hecho localmente | XLSX, PDF y portal; pruebas de archivos generados. |
 | HU4 paquete | Hecho localmente | Soportes, vencimientos, checklist, borrador y simulación. |
 | HU5 errores | Parcial | Errores tipados, plantilla corrupta y caso inexistente probados; no todas las combinaciones de fallo se han cubierto. |
-| Chat con modelo real | Parcial | Caso de Ecuador y confirmación de envío simulado probados en la misma sesión con Gemini 3.1; faltan los demás casos y verificar el despliegue público. |
+| Chat con modelo real | Probado localmente | Los cuatro casos oficiales y escenarios de confirmación y error se probaron con Gemini 3.1. Un error transitorio no identificado se resolvió al reintentar; falta verificar el despliegue público. Ver `RESULTADOS_PRUEBAS_REALES.md`. |
 | URL pública | Pendiente | Se evaluará al finalizar las pruebas locales; acceso y despliegue no configurados. |
 | CI | Preparado | Flujo de GitHub Actions en repositorio; pendiente su ejecución en remoto. |
 | Módulo | Verificado localmente | Se genera desde las fuentes canónicas, la suite compara el contenido y se importó una copia aislada; la integración con plataformas externas sigue pendiente. |
