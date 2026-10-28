@@ -54,3 +54,5 @@ Ver `SOLUCION.md` para arquitectura, límites, decisiones y riesgos.
 ## Módulo reutilizable
 
 `npm run sync:module` genera `modulo/` desde las mismas fuentes de la aplicación. La suite detecta divergencias y prueba su importación por separado; ver `modulo/README.md`.
+
+Para instrucciones detalladas y resultados esperados, consulta [PRUEBAS_MANUALES.md](PRUEBAS_MANUALES.md).
